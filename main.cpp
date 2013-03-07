@@ -114,7 +114,7 @@ int main()
         return 2;
     }
 
-    string runlocation = "python \"" + get_modman_dir() + "src\\main.py\"";
+    string runlocation = "python \"" + get_modman_dir() + "main.py\"";
 
     system(runlocation.c_str());
 
