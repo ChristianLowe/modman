@@ -46,10 +46,6 @@
 #include <shellapi.h>  // Omitted by WIN32_LEAN_AND_MEAN.
 
 
-#define MAX_REGKEY_NAME 255        // Actual unicode character limit.
-#define MAX_REGVALUE_NAME 16383    // Actual unicode character limit.
-#define MAX_REGVALUE_CONTENT 8192  // Arbitrary byte limit.
-
 #define KEY_WOW64_64KEY 0x0100     // View the real registry (no 32bit redirection on 64bit OSs).
 #define KEY_WOW64_32KEY 0x0200     // View the jailed 32bit registry (SOFTWARE\Wow6232Node on 64bit OSs).
                                    // These WOW64 flags have no effect on 32bit OSs.
