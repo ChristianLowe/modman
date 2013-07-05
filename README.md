@@ -1,8 +1,14 @@
 Modman.exe
-======
+==========
 
-A very simple Windows loader for Grognak's Mod Manager.
+A simple Windows launcher for Grognak's Mod Manager ([link](https://github.com/Grognak/Grognaks-Mod-Manager)).
 
-Modman.exe checks to make sure that python is on the path and is a suitable version. It then runs main.py.
+It searches for an installed python interpreter and tells it to run main.py.
 
-This is my first actual, useful C++ program. It's probably horrible; feel free to fork!
+If python.exe is found in a PATH dir, that will be used.
+
+Otherwise the registry is checked.
+
+* [HKCU and HKLM]\SOFTWARE\Python\PythonCore
+* [HKCU and HKLM]\SOFTWARE\Wow6432Node\Python\PythonCore
+* Priority is given to Python 2.7+, then 3.x, then 2.6.
