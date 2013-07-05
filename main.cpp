@@ -232,12 +232,13 @@ int main(int argc, char *argv[]) {
   // Spawn the python process.
   //   Let it use this app's console.
   //   Suppress the default GUI messagebox on failure.
+  //   Hope for a handle to the spawned process (not guaranteed).
   //
   // Never trust ShellExec's return code or hInstApp. Use GetLastError.
   //   http://blogs.msdn.com/b/oldnewthing/archive/2012/10/18/10360604.aspx
   SHELLEXECUTEINFO execInfo;
   execInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-  execInfo.fMask = 0|SEE_MASK_NO_CONSOLE|SEE_MASK_FLAG_NO_UI;
+  execInfo.fMask = 0|SEE_MASK_NO_CONSOLE|SEE_MASK_FLAG_NO_UI|SEE_MASK_NOCLOSEPROCESS;
   execInfo.hwnd = NULL;
   execInfo.lpVerb = L"open";
   execInfo.lpFile = chosenExePath.c_str();
@@ -257,6 +258,26 @@ int main(int argc, char *argv[]) {
     system("PAUSE");
     return EXIT_FAILURE;
   }
+
+  if (execInfo.hProcess != NULL) {
+    WaitForSingleObject(execInfo.hProcess, INFINITE);
+    DWORD exeExitCode;
+    iRes = GetExitCodeProcess(execInfo.hProcess, &exeExitCode);
+    CloseHandle(execInfo.hProcess);
+
+    if (iRes == 0) {
+      // Process spawned, but its exit code couldn't be determined.
+      return EXIT_SUCCESS;
+    }
+
+    if (exeExitCode != 0) {
+      // Exe returned a non-zero exit code. Pause for messages.
+      std::wcout << std::endl;
+      system("PAUSE");
+    }
+    return exeExitCode;
+  }
+
 
   return EXIT_SUCCESS;
  }
